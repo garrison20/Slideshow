@@ -1,0 +1,27 @@
+body
+{
+  font-family: Arial;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+input[type=file] 
+{
+  border: none;
+  color: white;
+  padding: 0vh 0vh 4vh 0vh;
+  display: inline-block;
+  font-size: 3.2vw;
+  color: black;
+}
+
+input[type=submit]
+{
+  font-size: 3.2vw;
+}
