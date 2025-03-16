@@ -1,7 +1,7 @@
 import os
 import random
 import tkinter as tk
-from PIL import Image, ImageTk
+from PIL import Image, ImageOps, ImageTk
 
 # Constants
 NO_IMAGES_FILENAME = "no_images.png"
@@ -65,12 +65,15 @@ def get_next_image_name():
 
 def get_next_image(width, height):
     pil_image = Image.open(get_next_image_name())
+    # https://github.com/python-pillow/Pillow/issues/4703
+    pil_image = ImageOps.exif_transpose(pil_image)
 
     img_width, img_height = pil_image.size
     ratio = min(width / img_width, height / img_height)
     img_width = int(img_width * ratio)
     img_height = int(img_height * ratio)
     pil_image = pil_image.resize((img_width, img_height))
+
     
     return pil_image
 

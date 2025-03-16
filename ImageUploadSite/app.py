@@ -39,6 +39,8 @@ def upload_file():
             return redirect(request.url)
         
         filename = generate_hashed_filename(file.filename)
+        if not os.path.exists(app.config['UPLOAD_FOLDER']):
+            os.makedirs(app.config['UPLOAD_FOLDER'])
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         flash("Successfully uploaded image!")
         return redirect(url_for('upload_file'))
