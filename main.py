@@ -4,8 +4,8 @@ import tkinter as tk
 from PIL import Image, ImageOps, ImageTk
 
 # Constants
-NO_IMAGES_FILENAME = "no_images.png"
-SITE_PATH = "./ImageUploadSite"
+NO_IMAGES_FILENAME = f"{os.getcwd()}/no_images.png"
+SITE_PATH = f"{os.getcwd()}/ImageUploadSite"
 IMAGES_PATH = f"{SITE_PATH}/files"
 TIME_BETWEEN_IMAGES = 10000
 
@@ -85,6 +85,11 @@ def update_image():
 
     root.after(TIME_BETWEEN_IMAGES, update_image) # if you pass args to the function being called, the slideshow doesn't work
 
+# Ensure the files path is available
+if not os.path.exists(IMAGES_PATH):
+    os.makedirs(IMAGES_PATH)
+
+# Set up TK and start the app
 root = tk.Tk()
 root.attributes("-fullscreen", 1, "-topmost", 1)
 root.bind("<Escape>", lambda e: (e.widget.withdraw(), e.widget.quit()))
