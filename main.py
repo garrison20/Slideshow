@@ -3,12 +3,65 @@ import random
 import tkinter as tk
 from PIL import Image, ImageTk
 
-FILES_PATH = "./ImageUploadSite/files"
+# Constants
+NO_IMAGES_FILENAME = "no_images.png"
+SITE_PATH = "./ImageUploadSite"
+IMAGES_PATH = f"{SITE_PATH}/files"
+TIME_BETWEEN_IMAGES = 10000
+
+# Screen info
 screenwidth = 0
 screenheight = 0
 
+# Display algo items
+curr_place_in_show = 0
+show_order = []
+
 def get_next_image_name():
-    return f"{FILES_PATH}/{random.choice(os.listdir(FILES_PATH))}"
+    global curr_place_in_show
+    global show_order
+
+    # Get the list of images in the database
+    images = os.listdir(IMAGES_PATH)
+
+    ####################################
+    # NO IMAGES UPLOADED
+    ####################################
+
+    # If there are no images uploaded, stop and return the "no images" image
+    if (len(images) == 0):
+        return NO_IMAGES_FILENAME
+    
+    ####################################
+    # IMAGES WERE UPLOADED
+    ####################################
+
+    # Restart if we hit the end of the slideshow, but also re-shuffle the ordering.
+    # This will run at bounds (first get call and when list is full).
+    if (curr_place_in_show >= len(show_order)):
+        curr_place_in_show = 0
+        show_order = []
+
+    # Create the scrambled list of indices if not already made
+    if (show_order == []):
+        show_order = list(range(0,len(images)))
+        random.shuffle(show_order)
+
+    # Images were added to the database. Take the new list of indices, shuffle them,
+    # and then add them if the front of the order list
+    if (len(images) > len(show_order)):
+        new_indices = list(range(len(show_order),len(images)))
+        random.shuffle(new_indices)
+        temp_curr_place_in_order = curr_place_in_show
+        for new_index in new_indices:
+            show_order.insert(temp_curr_place_in_order, new_index)
+            temp_curr_place_in_order += 1
+
+    # Get the current image name
+    image_name = f"{IMAGES_PATH}/{images[show_order[curr_place_in_show]]}"
+    curr_place_in_show += 1
+
+    return image_name
 
 def get_next_image(width, height):
     pil_image = Image.open(get_next_image_name())
@@ -27,7 +80,7 @@ def update_image():
     label.config(image=tkimg)
     label.image = tkimg # save a reference to avoid garbage collected
 
-    root.after(10000, update_image) # if you pass args to the function being called, the slideshow doesn't work
+    root.after(TIME_BETWEEN_IMAGES, update_image) # if you pass args to the function being called, the slideshow doesn't work
 
 root = tk.Tk()
 root.attributes("-fullscreen", 1, "-topmost", 1)
