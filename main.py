@@ -93,6 +93,7 @@ if not os.path.exists(IMAGES_PATH):
 root = tk.Tk()
 root.attributes("-fullscreen", 1, "-topmost", 1)
 root.bind("<Escape>", lambda e: (e.widget.withdraw(), e.widget.quit()))
+root.config(cursor="none")
 
 screenwidth = root.winfo_screenwidth()
 screenheight = root.winfo_screenheight()
