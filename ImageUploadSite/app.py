@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "password"
-app.config["UPLOAD_FOLDER"] = "files"
+app.config["UPLOAD_FOLDER"] = f"{os.path.dirname(os.path.realpath(__file__))}/files"
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "heic"}
 
 def allowed_file(filename):
