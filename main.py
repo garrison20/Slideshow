@@ -7,7 +7,7 @@ from PIL import Image, ImageOps, ImageTk
 NO_IMAGES_FILENAME = f"{os.path.dirname(os.path.realpath(__file__))}/no_images.png"
 SITE_PATH = f"{os.path.dirname(os.path.realpath(__file__))}/ImageUploadSite"
 IMAGES_PATH = f"{SITE_PATH}/files"
-TIME_BETWEEN_IMAGES = 5000
+TIME_BETWEEN_IMAGES = 10000
 
 # Screen info
 screenwidth = 0
