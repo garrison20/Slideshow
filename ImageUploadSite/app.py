@@ -1,21 +1,16 @@
 import os
 import random
-from flask import Flask, render_template, request, flash, redirect, url_for
+from datetime import datetime
 from werkzeug.utils import secure_filename
+from flask import Flask, render_template, request, flash, redirect, url_for
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "password"
-app.config["UPLOAD_FOLDER"] = f"{os.path.dirname(os.path.realpath(__file__))}/files"
+app.config["UPLOAD_FOLDER"] = os.path.join(f"{os.path.dirname(os.path.realpath(__file__))}", "files")
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "heic"}
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-# Create a probably unique filename every time
-def generate_hashed_filename(filename):
-    filename = secure_filename(filename)
-    filename_tokens = filename.rsplit('.', 1) # create this: [ filename, extension ]
-    return f"{filename_tokens[0]}{str(random.getrandbits(32))}.{filename_tokens[1]}"
 
 @app.route('/', methods=["GET", "POST"])
 def upload_file():
@@ -38,7 +33,7 @@ def upload_file():
             flash("Filetype not allowed!")
             return redirect(request.url)
         
-        filename = generate_hashed_filename(file.filename)
+        filename = f"{datetime.now().strftime('%y%m%d_%H%M%S')}.{file.filename.rsplit('.', 1)[1]}"
         if not os.path.exists(app.config['UPLOAD_FOLDER']):
             os.makedirs(app.config['UPLOAD_FOLDER'])
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
