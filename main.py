@@ -39,12 +39,9 @@ def get_next_image_name():
 
     # Restart if we hit the end of the slideshow, but also re-shuffle the ordering.
     # This will run at bounds (first get call and when list is full).
-    if (curr_place_in_show >= len(show_order)):
+    if (curr_place_in_show >= len(images)):
         curr_place_in_show = 0
-        show_order = []
-
-    # Create the scrambled list of indices if not already made
-    if (show_order == []):
+        # Create the scrambled list of indices
         show_order = list(range(0,len(images)))
         random.shuffle(show_order)
 
